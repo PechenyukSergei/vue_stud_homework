@@ -1,6 +1,6 @@
 <script setup>
     import { ref } from 'vue'
-    const side_text = ref('бубубу')
+    const side_text = ref('Место для рекламы')
 </script>
 
 <template>
