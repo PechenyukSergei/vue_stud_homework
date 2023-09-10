@@ -69,7 +69,7 @@
                 }
                 return true;
             },
-            validateReq2(value) {
+            validateReqCheckbox(value) {
                 // Если поле не заполнено
                 if (value) {
                     return 'Поле обязательно для заполнения';
@@ -110,7 +110,7 @@
                 <textarea class='solo' v-model="order.comment" placeholder="Комментарий"></textarea>
             </p>
             <p class="solo" >
-                Согласие на обработку перс. данных* <Field type="checkbox" name="chpers" v-model="order.chpers" :rules="validateReq2" />
+                Согласие на обработку перс. данных* <Field type="checkbox" name="chpers" v-model="order.chpers" :rules="validateReqCheckbox" />
                 <br/>
                 <ErrorMessage style="color: red" name="chpers" />
             </p>

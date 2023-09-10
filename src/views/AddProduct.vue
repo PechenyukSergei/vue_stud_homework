@@ -35,6 +35,16 @@
                 }
                 return true;
             },
+            validatePrice(value) {
+                // Если поле не заполнено
+                if (!value) {
+                    return 'Поле обязательно для заполнения и должно содержать только цифры';
+                }
+                if (value<0){
+                    return 'Цена не должна быть отрицательной';
+                }
+                return true;
+            },
             submitForm() {
                 alert('Товар добавлен (нет)');
             },
@@ -46,7 +56,7 @@
 <template>
     <div class="root">
         <Form @submit="submitForm">
-            <h2>Добавить товар(Формальная форма, пока не используется ни для чего)</h2>
+            <h2>Добавить товар</h2>
             <p>
                 <Field class='solo' name="prodTitle" type="text" v-model="addProd.prodTitle" placeholder="Введите наименование товара" :rules="validateReq"/>
                 <ErrorMessage style="color: red" name="prodTitle" />
@@ -66,7 +76,7 @@
                 <ErrorMessage style="color: red" name="prodCat" />
             </p>
             <p>
-                <Field class='solo' name="prodPrice" type="text" v-model="addProd.prodPrice" v-on:keypress="NumbersOnly" placeholder="Введите цену товара" :rules="validateReq"/>
+                <Field class='solo' name="prodPrice" v-model="addProd.prodPrice" type="number" placeholder="Введите цену товара" :rules="validatePrice"/>
                 <ErrorMessage style="color: red" name="prodPrice" />
             </p>
             <button>Отправить</button>

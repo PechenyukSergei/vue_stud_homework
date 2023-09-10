@@ -1,20 +1,33 @@
 <script>
     import { ref } from 'vue'
-    import json from './../json/products.json'
-    import axios from 'axios'
-
+    //import json from './../json/products.json'
+   // import axios from 'axios'
+    import { getData } from './../services/getProducts.js'
    // const products = ref(json)
     //const searchTitle = ref('')
-    const url="https://fakestoreapi.com/products"
+    //const url="https://fakestoreapi.com/products"
 
    /* function aaa(prodTitl, searchTitl) {
         if (searchTitl=='' || prodTitl.includes(searchTitl))
             return true;
     }*/
-    function filteredList() {
+    /*function filteredList() {
         return products.filter((product) =>
             product.toLowerCase().includes(searchTitle.value.toLowerCase())
         );
+    }*/
+
+
+
+    function checkIdinObj(localStorageObject, prod){
+        for (let key in localStorageObject) {
+            if (localStorageObject[key].prodId == prod.id){
+                localStorageObject[key].Count += 1;
+                localStorage.setItem("cart", JSON.stringify(localStorageObject));
+                return true
+            }
+        }
+        return false
     }
 
     export default {
@@ -32,47 +45,48 @@
             }
         },
         created(){
-            axios.get(url)
-                .then((response) => {
-                    this.products = response.data
-                })
+            getData((res) => {
+                this.products = res.data;
+            },(err) => {
+                alert(err);
+            });
         },
         computed: {
 
-            filteredList: function () {
-
-                var products = this.products;
-                var filter = this.filter;
-                //var searchTitle = this.searchTitle;
-                if ((!filter.filtTitle) && (!filter.filtPriceFrom) && (!filter.filtPriceTo)){
-                    return products;
-                }
-               /* if(!searchTitle){
-                    return products;
-                }*/
-
-                var searchString = filter.filtTitle.trim().toLowerCase();
-
-                products = products.filter(function(item){
-                    if (((!filter.filtTitle) || ((filter.filtTitle) && (item.title.toLowerCase().indexOf(searchString) !== -1)))
-                    && ((!filter.filtPriceFrom) || ((filter.filtPriceFrom) && (item.price >= filter.filtPriceFrom)))
-                    && ((!filter.filtPriceTo) || ((filter.filtPriceTo) && (item.price <= filter.filtPriceTo)))){
-                        return item;
-                    }
-                })
-                return products;
-            }
+            filteredList () {
+                let products = this.products;
+                let filter = this.filter;
+                let searchString = filter.filtTitle.trim().toLowerCase();
+                return products
+                    .filter((item) => item.title.toLowerCase().indexOf(searchString) !== -1)
+                    .filter((item) => ((!filter.filtPriceFrom) || item.price >= filter.filtPriceFrom))
+                    .filter((item) => ((!filter.filtPriceTo) || item.price <= filter.filtPriceTo));
+            },
         },
         methods: {
             NumbersOnly(evt) {
                 evt = (evt) ? evt : window.event;
                 var charCode = (evt.which) ? evt.which : evt.keyCode;
                 if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
-                    evt.preventDefault();;
+                    evt.preventDefault();
+                    ;
                 } else {
                     return true;
                 }
-            }
+            },
+            addToCart(prod) {
+                if (!localStorage.getItem("cart")) {
+                    localStorage.setItem("cart", JSON.stringify([{'prodId': prod.id, 'title': prod.title, 'price': prod.price, 'Count': 1}]));
+                } else {
+                    let localStorageObject = JSON.parse(localStorage.getItem('cart'));
+
+
+                    if (!(checkIdinObj(localStorageObject, prod))) {
+                        localStorageObject.push({'prodId': prod.id, 'title': prod.title, 'price': prod.price, 'Count': 1});
+                        localStorage.setItem("cart", JSON.stringify(localStorageObject));
+                    }
+                }
+            },
         }
     }
 </script>
@@ -91,7 +105,7 @@
     </div>
     <div>
         <ul>
-            <li v-for="(product, index) in filteredList" :key="index">
+            <li v-for="(product, id) in filteredList" :key="product.id">
 
                 <div >
                     <a :href="product.image" target="_blank">
@@ -100,6 +114,11 @@
                 </div>
                 <p class="prodTitl">{{product.title}}</p>
                 <p class="prodPrice">Цена: {{product.price}} &euro; </p>
+                <p>
+                    <button class="btn btn-primary" @click="addToCart(product)">
+                    В корзину
+                    </button>
+                </p>
             </li>
         </ul>
     </div>
