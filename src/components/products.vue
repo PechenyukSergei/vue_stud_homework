@@ -41,7 +41,9 @@
                     filtPriceTo: ''
                 },
                 //searchTitle: '',
-                visible: true
+                visible: true,
+                msg: '',
+                inputMsg: ''
             }
         },
         created(){
@@ -91,6 +93,9 @@
     }
 </script>
 <template>
+    <h1>{{msg}}</h1>
+    <input type="text" v-model="inputMsg" placeholder="message"/>
+    <button @click="msg=inputMsg">Submit</button>
     <div>
         <table>
             <tr>

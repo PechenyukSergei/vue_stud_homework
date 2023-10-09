@@ -1,6 +1,6 @@
 <template>
     <div class="cart">
-        <h2>Корзина товаров</h2>
+        <h2 id="irt">Корзина товаров</h2>
         <table style="border: 1px solid black; width:100%; text-align:center">
             <thead>
             <tr>

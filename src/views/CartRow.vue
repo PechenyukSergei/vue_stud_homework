@@ -1,10 +1,11 @@
 <template>
+    <div id="ir">+</div>
     <tr>
         <td>{{ item.id }}</td>
         <td>{{ catalogItem.title }}</td>
         <td>{{ catalogItem.price }}</td>
-        <td>{{ countInCart }}
-            <button @click="addToCart(1)">+</button>
+        <td id="iT">{{ countInCart }}
+            <button class="incButton" @click="addToCart(1)">+</button>
             <button @click="addToCart(-1)" :disabled="countInCart<=1">-</button>
         </td>
         <td>{{ sum }}</td>

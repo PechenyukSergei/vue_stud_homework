@@ -53,15 +53,16 @@
         <Form @submit="submitForm">
             <h2>Форма авторизации</h2>
             <p>
-                <Field class='solo' name="login" type="text" v-model="auth.login" placeholder="Введите логин" :rules="validateReq"/>
+                <Field id="login" class='solo' name="login" type="text" v-model="auth.login" placeholder="Введите логин" :rules="validateReq"/>
                 <ErrorMessage style="color: red" name="login" />
             </p>
             <p>
                 <Field class='solo' name="password" type="text" v-model="auth.password" placeholder="Введите пароль" :rules="validateReq"/>
                 <ErrorMessage style="color: red" name="password" />
             </p>
-            <button @keyup.enter="submitForm">Отправить</button>
+            <button  @keyup.enter="submitForm">Отправить</button>
         </Form>
+        <button id="but" @click="authStore.logIn(auth.login)">Отправить2</button>
     </div>
 </template>
 
