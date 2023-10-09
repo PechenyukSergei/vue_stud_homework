@@ -2,8 +2,7 @@
     import { ref } from 'vue'
     import { Form, Field, ErrorMessage } from 'vee-validate';
     import router from './../router'
-    import { mapStores } from 'pinia'
-    import {useAuthStore} from "../stores/auth";
+    import { mapActions } from 'vuex'
 
     export default {
         name: 'auth',
@@ -20,12 +19,10 @@
             Field,
             ErrorMessage,
         },
-        computed: {
-            // note we are not passing an array, just one store after the other
-            // each store will be accessible as its id + 'Store'
-            ...mapStores(useAuthStore)
-        },
         methods: {
+            ...mapActions({
+                signIn: 'auth/signIn'
+            }),
             validateReq(value) {
                 // Если поле не заполнено
                 if (!value) {
@@ -33,15 +30,8 @@
                 }
                 return true;
             },
-            submitForm() {
-                //localStorage.setItem('isAuth', true);
-                //if (authStore.auth.length != 0){
-                //    alert('Пользователь уже авторизован');
-                //} else {
-                this.authStore.logIn( this.auth.login )
-              //  useAuthStore.logIn( {"login":'12' })
-                    router.push({path: 'add'})
-               // }
+            submit() {
+                this.signIn(this.form)
             },
         },
     }
